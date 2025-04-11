@@ -1,0 +1,1883 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Green & Tasty API",
+    "version": "2025-03-19T03:45:34Z",
+    "description": "# Green & Tasty Restaurant Management System\n\nThis API serves the restaurant management application for the **\"Green & Tasty\"** restaurant network, currently operating across **3 locations**. Each location has between **10-20 tables**, with varying seating capacities (up to **10 seats per table**).\n\nThe system helps automate the creation and management of the **'Green T Report'** – a critical monthly compilation of metrics, including:\n- **Menu offerings**  \n- **Customer attendance**  \n- **Staff performance**  \n\nThis data provides valuable insights for both **day-to-day operations** and **long-term strategic planning**.\n\n## Key Features\n\n- **Restaurant Location Management**:  \n  Access information about all restaurant locations, their capacities, and occupancy rates.  \n\n- **Menu & Speciality Dishes**:  \n  Retrieve menu items and speciality dishes specific to each location.  \n\n- **Customer Feedback System**:  \n  Collect, filter, and analyze customer feedback based on cuisine experience and service quality.  \n\n- **User Authentication**:  \n  Secure access for staff members with role-based permissions.  \n\n- **Reporting Tools**:  \n  Automated data collection and processing for the **'Green T Report'**.  "
+  },
+  "servers": [
+    {
+      "url": "https://qvc1ftir24.execute-api.eu-north-1.amazonaws.com/{basePath}",
+      "variables": {
+        "basePath": {
+          "default": "api"
+        }
+      }
+    }
+  ],
+
+  "paths": {
+    "/auth/sign-up": {
+      "post": {
+        "summary": "User registration",
+        "description": "Adds user to AWS Cognito user pool",
+        "tags": ["User management"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Signup"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignupSuccess"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The email is already used",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignupFailed"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input parameters were used for registration",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Registration400Failed"
+                }
+              }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:eu-north-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-north-1:761018851832:function:api_handler/invocations",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          },
+          "passthroughBehavior": "when_no_match"
+        }
+      }
+    },
+    "/auth/sign-in": {
+      "post": {
+        "summary": "User authentication",
+        "description": "Generate id token for user",
+        "tags": ["User management"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Signin"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SigninSuccess"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email or password is incorrect",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SigninFailed"
+                }
+              }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:eu-north-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-north-1:761018851832:function:api_handler/invocations",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          },
+          "passthroughBehavior": "when_no_match"
+        }
+      }
+    },
+    "/users/profile": {
+      "get": {
+        "summary": "Get user info",
+        "description": "Receive information about authenticated user",
+        "tags": ["User management"],
+        "responses": {
+          "200": {
+            "description": "User info was received",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserInfo"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authorizer": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "GET",
+          "uri": "arn:aws:apigateway:eu-north-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-north-1:761018851832:function:api_handler/invocations",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          },
+          "passthroughBehavior": "when_no_match"
+        }
+      }
+    },
+    "/bookings/table": {
+      "get": {
+        "summary": "returns a list of available tables",
+        "description": "This endpoint returns a list of tables available for booking",
+        "tags": ["Bookings"],
+        "parameters": [
+          {
+            "name": "locationId",
+            "in": "query",
+            "description": "Location ID",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "a5d8f2c49b6e71d3f84a92b7"
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "description": "Date",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2025-03-23"
+          },
+          {
+            "name": "time",
+            "in": "query",
+            "description": "Time",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "14:00"
+          },
+          {
+            "name": "guests",
+            "in": "query",
+            "description": "Number of guests",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tables were successfully received",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TableResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing or incorrect required params",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTables400Failed"
+                }
+              }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "GET",
+          "uri": "arn:aws:apigateway:eu-north-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-north-1:761018851832:function:api_handler/invocations",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          },
+          "passthroughBehavior": "when_no_match"
+        }
+      }
+    },
+    "/locations": {
+      "get": {
+        "summary": "returns list of detailed info for all locations",
+        "description": "This endpoint returns a list of locations",
+        "tags": ["Location information"],
+        "responses": {
+          "200": {
+            "description": "Location information was successfully received",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllLocations"
+                }
+              }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "GET",
+          "uri": "arn:aws:apigateway:eu-north-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-north-1:761018851832:function:api_handler/invocations",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          },
+          "passthroughBehavior": "when_no_match"
+        }
+      }
+    },
+    "/locations/{id}": {
+      "get": {
+        "summary": "returns detailed information for location by its id",
+        "description": "This endpoint returns detailed info for location",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Location ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "672846d5c951184d705b65d7"
+          }
+        ],
+        "tags": ["Location information"],
+        "responses": {
+          "200": {
+            "description": "Location information was successfully received",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OneLocation"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Location not found",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Location404Failed"
+                }
+              }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "GET",
+          "uri": "arn:aws:apigateway:eu-north-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-north-1:761018851832:function:api_handler/invocations",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          },
+          "passthroughBehavior": "when_no_match"
+        }
+      }
+    },
+    "/locations/{id}/speciality-dishes": {
+      "get": {
+        "summary": "returns a list of speciality dishes for the location",
+        "description": "This endpoint returns list of speciality dishes for the location by its ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Location ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "672846d5c951184d705b65d7"
+          }
+        ],
+        "tags": ["Location information"],
+        "responses": {
+          "200": {
+            "description": "Speciality dishes were successfully received",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpecialityDishes"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Location not found",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Location404Failed"
+                }
+              }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "GET",
+          "uri": "arn:aws:apigateway:eu-north-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-north-1:761018851832:function:api_handler/invocations",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          },
+          "passthroughBehavior": "when_no_match"
+        }
+      }
+    },
+    "/locations/{id}/feedbacks": {
+      "get" : {
+        "summary": "returns a list of feedbacks for the location",
+        "description": "This endpoint returns list of feedbacks for the location by its ID with sorting and pagination options",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Location ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "672846d5c951184d705b65d7"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Feedback type",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "SERVICE_QUALITY"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sorting parameters",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "rate,asc"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Number of page",
+            "required": false,
+            "schema": {
+              "type": "number"
+            },
+            "example": 1
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Number of feedbacks per page",
+            "required": false,
+            "schema": {
+              "type": "number"
+            },
+            "example": 10
+          }
+        ],
+        "tags": ["Location information"],
+        "responses": {
+          "200": {
+            "description": "Feedbacks were successfully received",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Feedbacks"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Location not found",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Location404Failed"
+                }
+              }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "GET",
+          "uri": "arn:aws:apigateway:eu-north-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-north-1:761018851832:function:api_handler/invocations",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          },
+          "passthroughBehavior": "when_no_match"
+        }
+      }
+    },
+    "/bookings/client": {
+      "post": {
+        "summary": "Create new reservation",
+        "description": "Create new reservation by authorized customer",
+        "tags": ["Bookings"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReservationInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Reservation was created successfully",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationInfo"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The user doesn't have a role 'Customer'",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Reservation401Failed"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authorizer": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:eu-north-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-north-1:761018851832:function:api_handler/invocations",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          },
+          "passthroughBehavior": "when_no_match"
+        }
+      }
+    },
+    "/reservations": {
+      "get": {
+        "summary": "View all reservations of user",
+        "description": "View all reservations of authorized user",
+        "tags": ["Reservations"],
+        "responses": {
+          "200": {
+            "description": "Reservations were received successfully",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationsOfUser"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authorizer": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:eu-north-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-north-1:761018851832:function:api_handler/invocations",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          },
+          "passthroughBehavior": "when_no_match"
+        }
+      }
+    },
+    "/reservations/{id}": {
+      "delete": {
+        "summary": "Delete reservation of the user",
+        "description": "Delete a reservation of authorized user by its id",
+        "tags": ["Reservations"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Reservation ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "b4144d06-c340-4676-b254-d666a2f15d9f"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reservation was deleted successfully",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteReservationSuccess"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Cannot delete reservation of other user",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteReservation403Failed"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cannot find reservation with such id",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteReservation404Failed"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Cannot delete reservation when less than 30 minutes left",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteReservation422Failed"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error with reservation deleting",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteReservation500Failed"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authorizer": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:eu-north-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-north-1:761018851832:function:api_handler/invocations",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Methods": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          },
+          "passthroughBehavior": "when_no_match"
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Empty": {
+        "title": "Empty Schema",
+        "type": "object"
+      },
+      "Signup": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Dowson"
+          },
+          "email": {
+            "type": "string",
+            "example": "waiter1@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "h9ahg9sahohh&98Uasafas"
+          }
+        },
+        "required": ["firstName", "lastName", "email", "password"]
+      },
+      "Signin": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "waiter1@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "h9ahg9sahohh&98Uasafas"
+          }
+        },
+        "required": ["email", "password"]
+      },
+      "SignupSuccess": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "accessToken": {
+                "type": "string",
+                "example": "eyJjdHkiOiJKV1QiLCJlbm..."
+              },
+              "refreshToken": {
+                "type": "string",
+                "example": "eyJjdHyHOHLNLJOBO..."
+              }
+            }
+          },
+          "meta": {
+            "type": "object",
+            "properties":  {
+              "error": {
+                "type": "null",
+                "example": null
+              },
+              "status": {
+                "type": "integer",
+                "example": 200
+              }
+            }
+          }
+        }
+      },
+      "SignupFailed": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "null",
+            "example": null
+          },
+          "meta": {
+            "type": "object",
+            "properties":  {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "example": 4091
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "The email was already used for registration"
+                  }
+                }
+              },
+              "status": {
+                "type": "integer",
+                "example": 409
+              }
+            }
+          }
+        }
+      },
+      "SigninSuccess": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "accessToken": {
+                "type": "string",
+                "example": "eyJjdHkiOiJKV1QiLCJlbm..."
+              },
+              "refreshToken": {
+                "type": "string",
+                "example": "eyJjdHyHOHLNLJOBO..."
+              }
+            }
+          },
+          "meta": {
+            "type": "object",
+            "properties":  {
+              "error": {
+                "type": "null",
+                "example": null
+              },
+              "status": {
+                "type": "integer",
+                "example": 200
+              }
+            }
+          }
+        }
+      },
+      "SigninFailed": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "null",
+            "example": null
+          },
+          "meta": {
+            "type": "object",
+            "properties":  {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "example": 4002
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Incorrect username or password"
+                  }
+                }
+              },
+              "status": {
+                "type": "integer",
+                "example": 400
+              }
+            }
+          }
+        }
+      },
+      "Error400Failed": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "null",
+            "example": null
+          },
+          "meta": {
+            "type": "object",
+            "properties":  {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "example": 4001
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Bad request"
+                  }
+                }
+              },
+              "status": {
+                "type": "integer",
+                "example": 400
+              }
+            }
+          }
+        }
+      },
+      "GetTables400Failed": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "null",
+            "example": null
+          },
+          "meta": {
+            "type": "object",
+            "properties":  {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "example": 4001
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Missing required param in date"
+                  }
+                }
+              },
+              "status": {
+                "type": "integer",
+                "example": 400
+              }
+            }
+          }
+        }
+      },
+      "Registration400Failed": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "null",
+            "example": null
+          },
+          "meta": {
+            "type": "object",
+            "properties":  {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "example": 4001
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Registration failure. Please check your input parameters"
+                  }
+                }
+              },
+              "status": {
+                "type": "integer",
+                "example": 400
+              }
+            }
+          }
+        }
+      },
+      "DeleteReservation403Failed": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "null",
+            "example": null
+          },
+          "meta": {
+            "type": "object",
+            "properties":  {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "example": 4003
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "User mike@example.com is not authorized to delete this reservation"
+                  }
+                }
+              },
+              "status": {
+                "type": "integer",
+                "example": 403
+              }
+            }
+          }
+        }
+      },
+      "DeleteReservationSuccess": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "null",
+            "example": null
+          },
+          "meta": {
+            "type": "object",
+            "properties":  {
+              "error": {
+                "type": "null",
+                "example": null
+              },
+              "status": {
+                "type": "integer",
+                "example": 200
+              }
+            }
+          }
+        }
+      },
+      "DeleteReservation404Failed": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "null",
+            "example": null
+          },
+          "meta": {
+            "type": "object",
+            "properties":  {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "example": 4004
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Reservation under this ID not found"
+                  }
+                }
+              },
+              "status": {
+                "type": "integer",
+                "example": 404
+              }
+            }
+          }
+        }
+      },
+      "DeleteReservation422Failed": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "null",
+            "example": null
+          },
+          "meta": {
+            "type": "object",
+            "properties":  {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "example": 4013
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Reservations can only be canceled at least 30 minutes before the reservation time"
+                  }
+                }
+              },
+              "status": {
+                "type": "integer",
+                "example": 422
+              }
+            }
+          }
+        }
+      },
+      "DeleteReservation500Failed": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "null",
+            "example": null
+          },
+          "meta": {
+            "type": "object",
+            "properties":  {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "example": 5001
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Failed to delete reservation"
+                  }
+                }
+              },
+              "status": {
+                "type": "integer",
+                "example": 500
+              }
+            }
+          }
+        }
+      },
+      "Reservation401Failed": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "null",
+            "example": null
+          },
+          "meta": {
+            "type": "object",
+            "properties":  {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "example": 4012
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "The user should have a role 'Customer' for this operation"
+                  }
+                }
+              },
+              "status": {
+                "type": "integer",
+                "example": 500
+              }
+            }
+          }
+        }
+      },
+      "Location404Failed": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "null",
+            "example": null
+          },
+          "meta": {
+            "type": "object",
+            "properties":  {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "example": 4041
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Location not found"
+                  }
+                }
+              },
+              "status": {
+                "type": "integer",
+                "example": 404
+              }
+            }
+          }
+        }
+      },
+      "GetUserInfo": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "firstName": {
+                "type": "string",
+                "example": "John"
+              },
+              "lastName": {
+                "type": "string",
+                "example": "Dowson"
+              },
+              "email": {
+                "type": "string",
+                "example": "customer@gmail.com"
+              },
+              "imageUrl": {
+                "type": "string",
+                "format": "uri",
+                "example": "https://cloudphoto.com/9u98u989y"
+              },
+              "role": {
+                "type": "string",
+                "enum": [
+                  "Customer",
+                  "Waiter"
+                ],
+                "example": "Customer"
+              }
+            }
+          },
+          "meta": {
+            "type": "object",
+            "properties":  {
+              "error": {
+                "type": "null",
+                "example": null
+              },
+              "status": {
+                "type": "integer",
+                "example": 200
+              }
+            }
+          }
+        }
+      },
+      "TableResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "locationId": {
+                  "type": "string",
+                  "example": "672846d5c951184d705b65d7"
+                },
+                "locationAddress": {
+                  "type": "string",
+                  "example": "48 Rustaveli Avenue"
+                },
+                "tableNumber": {
+                  "type": "number",
+                  "example": "1"
+                },
+                "capacity": {
+                  "type": "number",
+                  "example": "2"
+                },
+                "availableSlots": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "example": ["10:30-12:00",
+                      "12:15-13:45",
+                      "15:45-17:15",
+                      "21:00-22:30"]
+                  }
+                }
+              }
+            }
+          },
+          "meta": {
+            "type": "object",
+            "properties":  {
+              "error": {
+                "type": "null",
+                "example": null
+              },
+              "status": {
+                "type": "integer",
+                "example": 200
+              }
+            }
+          }
+        }
+      },
+      "AllLocations": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "locationId": {
+                  "type": "string",
+                  "example": "672846d5c951184d705b65d7"
+                },
+                "address": {
+                  "type": "string",
+                  "example": "48 Rustaveli Avenue"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "Located on bustling Rustaveli Avenue, this branch offers..."
+                },
+                "totalCapacity": {
+                  "type": "number",
+                  "example": 68
+                },
+                "averageOccupancy": {
+                  "type": "number",
+                  "example": 95
+                },
+                "imageUrl": {
+                  "type": "string",
+                  "example": "https://example.com/restaurant.jpg"
+                },
+                "rating": {
+                  "type": "string",
+                  "example": "4.7"
+                }
+              }
+            }
+          },
+          "meta": {
+            "type": "object",
+            "properties":  {
+              "error": {
+                "type": "null",
+                "example": null
+              },
+              "status": {
+                "type": "integer",
+                "example": 200
+              }
+            }
+          }
+        }
+      },
+      "AllLocationsBrief": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "locationId": {
+                  "type": "string",
+                  "example": "672846d5c951184d705b65d7"
+                },
+                "address": {
+                  "type": "string",
+                  "example": "48 Rustaveli Avenue"
+                }
+              }
+            }
+          },
+          "meta": {
+            "type": "object",
+            "properties":  {
+              "error": {
+                "type": "null",
+                "example": null
+              },
+              "status": {
+                "type": "integer",
+                "example": 200
+              }
+            }
+          }
+        }
+      },
+      "OneLocation": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "locationId": {
+                "type": "string",
+                "example": "672846d5c951184d705b65d7"
+              },
+              "address": {
+                "type": "string",
+                "example": "48 Rustaveli Avenue"
+              },
+              "description": {
+                "type": "string",
+                "example": "Located on bustling Rustaveli Avenue, this branch offers..."
+              },
+              "totalCapacity": {
+                "type": "number",
+                "example": 68
+              },
+              "averageOccupancy": {
+                "type": "number",
+                "example": 95
+              },
+              "imageUrl": {
+                "type": "string",
+                "example": "https://example.com/restaurant.jpg"
+              },
+              "rating": {
+                "type": "string",
+                "example": "4.7"
+              }
+            }
+          },
+          "meta": {
+            "type": "object",
+            "properties":  {
+              "error": {
+                "type": "null",
+                "example": null
+              },
+              "status": {
+                "type": "integer",
+                "example": 200
+              }
+            }
+          }
+        }
+      },
+      "SpecialityDishes": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "dishId": {
+                  "type": "string",
+                  "example": "589a8b55-f4f0-4cb4-b885-cc971cc5ea14"
+                },
+                "locationId": {
+                  "type": "string",
+                  "example": "672846d5c951184d705b65d7"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Fresh Strawberry Mint Salad"
+                },
+                "price": {
+                  "type": "string",
+                  "example": "17"
+                },
+                "weight": {
+                  "type": "string",
+                  "example": "430g"
+                },
+                "imageUrl": {
+                  "type": "string",
+                  "example": "https://example.com/mint_salad.jpg"
+                }
+              }
+            }
+          },
+          "meta": {
+            "type": "object",
+            "properties":  {
+              "error": {
+                "type": "null",
+                "example": null
+              },
+              "status": {
+                "type": "integer",
+                "example": 200
+              }
+            }
+          }
+        }
+      },
+      "FeedbackResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "96ca18e0-1c53-4e1e-812c-639f5e7cdef5"
+          },
+          "rate": {
+            "type": "number",
+            "example": 5
+          },
+          "comment": {
+            "type": "string",
+            "example": "Great location, very friendly staff!"
+          },
+          "userName": {
+            "type": "string",
+            "example": "Lisa Taylor"
+          },
+          "userAvatarUrl": {
+            "type": "string",
+            "example": "https://example.com/avatar.jpg"
+          },
+          "date": {
+            "type": "string",
+            "example": "2025-03-22T15:30:00Z"
+          },
+          "type": {
+            "type": "string",
+            "example": "SERVICE_QUALITY"
+          },
+          "locationId": {
+            "type": "string",
+            "example": "672846d5c951184d705b65d7"
+          }
+        }
+      },
+      "Feedbacks": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "number",
+            "example": 5
+          },
+          "totalElements": {
+            "type": "number",
+            "example": 120
+          },
+          "size": {
+            "type": "number",
+            "example": 20
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FeedbackResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SortObject"
+            },
+            "example": [
+              {
+                "direction": "asc",
+                "nullHandling": "NATIVE",
+                "ascending": true,
+                "property": "rate",
+                "ignoreCase": false
+              }
+            ]
+          },
+          "first": {
+            "type": "boolean",
+            "example": true
+          },
+          "last": {
+            "type": "boolean",
+            "example": true
+          },
+          "numberOfElements": {
+            "type": "number",
+            "example": 20
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "empty": {
+            "type": "boolean",
+            "example": false
+          }
+        }
+      },
+      "PageableObject": {
+        "type": "object",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "format": "int64",
+            "example": 0
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SortObject"
+            },
+            "example": [
+              {
+                "direction": "asc",
+                "nullHandling": "NATIVE",
+                "ascending": true,
+                "property": "rate",
+                "ignoreCase": false
+              }
+            ]
+          },
+          "paged": {
+            "type": "boolean",
+            "example": true
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32",
+            "example": 20
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          },
+          "unpaged": {
+            "type": "boolean",
+            "example": false
+          }
+        }
+      },
+      "SortObject": {
+        "type": "object",
+        "properties": {
+          "direction": {
+            "type": "string",
+            "example": "asc"
+          },
+          "nullHandling": {
+            "type": "string",
+            "example": "NATIVE"
+          },
+          "ascending": {
+            "type": "boolean",
+            "example": true
+          },
+          "property": {
+            "type": "string",
+            "example": "rate"
+          },
+          "ignoreCase": {
+            "type": "boolean",
+            "example": false
+          }
+        }
+      },
+      "ReservationInput": {
+        "type": "object",
+        "properties": {
+          "locationId": {
+            "type": "string",
+            "example": "672846d5c951184d705b65d7"
+          },
+          "tableNumber": {
+            "type": "string",
+            "example": "1"
+          },
+          "date": {
+            "type": "string",
+            "example": "2025-05-17"
+          },
+          "guestsNumber": {
+            "type": "string",
+            "example": "2"
+          },
+          "timeFrom": {
+            "type": "string",
+            "example": "17:30"
+          },
+          "timeTo": {
+            "type": "string",
+            "example": "19:00"
+          }
+        }
+      },
+      "ReservationInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "4fd4d2d6-6242-4341-9546-e5dc0e8c1ed0"
+          },
+          "userInfo": {
+            "type": "string",
+            "example": "John Montgomerry (montgomerry@gmail.com)"
+          },
+          "status": {
+            "type": "string",
+            "example": "reserved"
+          },
+          "locationAddress": {
+            "type": "string",
+            "example": "48 Rustaveli Avenue"
+          },
+          "date": {
+            "type": "string",
+            "example": "2025-05-17"
+          },
+          "timeSlot": {
+            "type": "string",
+            "example": "17:30 - 19:00"
+          },
+          "preOrder": {
+            "type": "string",
+            "example": "Vegan Pasta, Lemonade"
+          },
+          "guestsNumber": {
+            "type": "number",
+            "example": 2
+          },
+          "tableNumber": {
+            "type": "number",
+            "example": 1
+          },
+          "feedbackId": {
+            "type": "string",
+            "example": "Gfd4d2d6-6242-4341-9U46-e5dc0e8c1ed7"
+          }
+        }
+      },
+      "ReservationsOfUser": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ReservationInfo"
+        }
+      }
+    },
+    "securitySchemes": {
+      "authorizer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "x-amazon-apigateway-authtype": "cognito_user_pools",
+        "x-amazon-apigateway-authorizer": {
+          "x-syndicate-cognito-userpool-names": ["tm5-restaurant_userpool-demo"],
+          "type": "cognito_user_pools"
+        }
+      }
+    }
+  },
+  "x-syndicate-openapi-tags": {
+    "team": "5"
+  }
+}
