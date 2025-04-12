@@ -22,17 +22,17 @@ public class LocationController {
     }
 
     @GetMapping("/{id}")
-    public LocationResponse getLocationById(@PathVariable Long id) {
+    public LocationResponse getLocationById(@PathVariable String id) {  // Changed Long to String for DynamoDB compatibility
         return locationService.getLocationById(id);
     }
 
     @GetMapping("/{id}/speciality-dishes")
-    public List<SpecialityDishResponse> getSpecialityDishesByLocation(@PathVariable Long id) {
+    public List<SpecialityDishResponse> getSpecialityDishesByLocation(@PathVariable String id) {  // Changed Long to String for DynamoDB compatibility
         return locationService.getSpecialityDishesByLocation(id);
     }
 
     @GetMapping("/{id}/feedbacks")
-    public List<FeedbackResponse> getFeedbacksByLocation(@PathVariable Long id) {
+    public List<FeedbackResponse> getFeedbacksByLocation(@PathVariable String id) {  // Changed Long to String for DynamoDB compatibility
         return locationService.getFeedbacksByLocation(id);
     }
 }
