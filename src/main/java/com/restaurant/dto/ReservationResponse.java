@@ -1,7 +1,12 @@
 package com.restaurant.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
+@Data
+@AllArgsConstructor
 public class ReservationResponse {
 
     private Long id;
@@ -9,12 +14,4 @@ public class ReservationResponse {
     private String customerId;
     private LocalDateTime reservationTime;
 
-    public ReservationResponse(Long id, String tableId, String customerId, LocalDateTime reservationTime) {
-        this.id = id;
-        this.tableId = tableId;
-        this.customerId = customerId;
-        this.reservationTime = reservationTime;
-    }
-
-    // Getters and Setters
 }

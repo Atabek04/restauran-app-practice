@@ -3,7 +3,7 @@ package com.restaurant.controller;
 import com.restaurant.dto.UserProfileResponse;
 import com.restaurant.model.User;
 import com.restaurant.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserProfileController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @GetMapping("/profile")
     public UserProfileResponse getUserProfile(@AuthenticationPrincipal UserDetails userDetails) {

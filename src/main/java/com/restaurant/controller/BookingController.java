@@ -3,20 +3,22 @@ package com.restaurant.controller;
 import com.restaurant.dto.BookingRequest;
 import com.restaurant.dto.BookingResponse;
 import com.restaurant.service.BookingService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/bookings")
+@RequiredArgsConstructor
 public class BookingController {
 
-    @Autowired
-    private BookingService bookingService;
+    private final BookingService bookingService;
 
     @PostMapping("/client")
+    @ResponseStatus(HttpStatus.CREATED)
     public BookingResponse createBooking(@Valid @RequestBody BookingRequest bookingRequest) {
         return bookingService.createBooking(bookingRequest);
     }

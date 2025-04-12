@@ -1,9 +1,12 @@
 package com.restaurant.dto;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import lombok.Data;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
+@Data
 public class BookingRequest {
 
     @NotBlank
@@ -14,6 +17,5 @@ public class BookingRequest {
 
     @NotNull
     private LocalDateTime bookingTime;
-
-    // Getters and Setters
+    
 }

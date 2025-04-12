@@ -4,17 +4,17 @@ import com.restaurant.dto.LocationResponse;
 import com.restaurant.dto.SpecialityDishResponse;
 import com.restaurant.dto.FeedbackResponse;
 import com.restaurant.service.LocationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/locations")
+@RequiredArgsConstructor
 public class LocationController {
 
-    @Autowired
-    private LocationService locationService;
+    private final LocationService locationService;
 
     @GetMapping
     public List<LocationResponse> getAllLocations() {

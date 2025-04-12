@@ -1,16 +1,13 @@
 package com.restaurant.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
 public class FeedbackResponse {
 
     private Long id;
     private String comment;
     private int rating;
-
-    public FeedbackResponse(Long id, String comment, int rating) {
-        this.id = id;
-        this.comment = comment;
-        this.rating = rating;
-    }
-
-    // Getters and Setters
 }
