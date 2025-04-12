@@ -7,11 +7,13 @@ import com.restaurant.model.Location;
 import com.restaurant.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@EnableScan
 public class LocationService {
 
     @Autowired
