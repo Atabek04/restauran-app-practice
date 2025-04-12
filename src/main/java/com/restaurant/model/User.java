@@ -1,15 +1,15 @@
 package com.restaurant.model;
 
-import jakarta.persistence.*;
+import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBHashKey;
+import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBTable;
+
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "users")
+@DynamoDBTable(tableName = "users")
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @DynamoDBHashKey
     private Long id;
 
     private String username;
@@ -18,10 +18,6 @@ public class User {
 
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
     // Getters and Setters

@@ -1,19 +1,14 @@
 package com.restaurant.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBHashKey;
+import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBTable;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "reservations")
+@DynamoDBTable(tableName = "reservations")
 public class Reservation {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @DynamoDBHashKey
     private Long id;
 
     private String tableId;

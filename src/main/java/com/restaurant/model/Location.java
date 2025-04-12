@@ -27,4 +27,44 @@ public class Location {
     private List<Feedback> feedbacks;
 
     // Getters and Setters
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public List<SpecialityDish> getSpecialityDishes() {
+        return specialityDishes;
+    }
+
+    public void setSpecialityDishes(List<SpecialityDish> specialityDishes) {
+        this.specialityDishes = specialityDishes;
+    }
+
+    public List<Feedback> getFeedbacks() {
+        return feedbacks;
+    }
+
+    public void setFeedbacks(List<Feedback> feedbacks) {
+        this.feedbacks = feedbacks;
+    }
 }
