@@ -2,12 +2,12 @@ package com.restaurant.repository;
 
 import com.restaurant.model.User;
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
-import org.springframework.data.repository.CrudRepository;
+import org.socialsignin.spring.data.dynamodb.repository.DynamoDBCrudRepository;
 
 import java.util.Optional;
 
 @EnableScan
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends DynamoDBCrudRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
 

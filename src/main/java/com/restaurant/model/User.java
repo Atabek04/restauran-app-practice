@@ -1,16 +1,19 @@
 package com.restaurant.model;
 
-
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBHashKey;
+import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBTable;
+import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBAttribute;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 import java.util.Set;
 
 @Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @DynamoDBTable(tableName = "Users")
 public class User {
 
