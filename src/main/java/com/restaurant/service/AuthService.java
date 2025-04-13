@@ -5,6 +5,6 @@ import com.restaurant.dto.LoginRequest;
 import com.restaurant.dto.SignupRequest;
 
 public interface AuthService {
-    JwtResponse signIn(LoginRequest loginRequest);
-    void signUp(SignupRequest signUpRequest);
+    JwtResponse authenticateUser(LoginRequest loginRequest);
+    void registerUser(SignupRequest signUpRequest);
 }
