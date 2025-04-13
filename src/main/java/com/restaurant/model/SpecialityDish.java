@@ -27,5 +27,5 @@ public class SpecialityDish {
     private String description;
 
     @DynamoDBAttribute
-    private Location location;
+    private String location;
 }
