@@ -1,6 +1,6 @@
 package com.restaurant.model;
 
-public enum ERole {
+public enum UserRole {
     ROLE_CUSTOMER,
     ROLE_WAITER
 }

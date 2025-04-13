@@ -1,7 +1,9 @@
 package com.restaurant.model;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConvertedEnum;
 import lombok.Data;
 
 @Data
@@ -9,14 +11,26 @@ import lombok.Data;
 public class Feedback {
     @DynamoDBHashKey
     private String feedbackId;
+
+    @DynamoDBAttribute
     private String comment;
+
+    @DynamoDBAttribute
     private String date;
-    private String locationAddress;
+
+    @DynamoDBAttribute
     private String locationId;
+
+    @DynamoDBAttribute
     private int rate;
-    private String reservationId;
-    private String type;
+
+    @DynamoDBAttribute
+    @DynamoDBTypeConvertedEnum
+    private FeedbackType type;
+
+    @DynamoDBAttribute
     private String userName;
-    private String waiterId;
-    private String waiterName;
+
+    @DynamoDBAttribute
+    private String userAvatarUrl;
 }

@@ -1,32 +1,33 @@
 package com.restaurant.model;
 
-import com.github.derjust.spring_dynamodb.annotation.DynamoDBHashKey;
-import com.github.derjust.spring_dynamodb.annotation.DynamoDBGeneratedUuid;
-import com.github.derjust.spring_dynamodb.annotation.DynamoDBTable;
-import com.github.derjust.spring_dynamodb.annotation.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import lombok.Data;
 
-import java.util.List;
-import java.util.UUID;
-
 @Data
-@DynamoDBTable(tableName = "locations")
+@DynamoDBTable(tableName = "Locations")
 public class Location {
 
     @DynamoDBHashKey
-    @DynamoDBGeneratedUuid
-    private String id;
-
-    @DynamoDBAttribute
-    private String name;
+    private String locationId;
 
     @DynamoDBAttribute
     private String address;
 
     @DynamoDBAttribute
-    private List<SpecialityDish> specialityDishes;
+    private String description;
 
     @DynamoDBAttribute
-    private List<Feedback> feedbacks;
+    private int totalCapacity;
+
+    @DynamoDBAttribute
+    private int averageOccupancy;
+
+    @DynamoDBAttribute
+    private String imageUrl;
+
+    @DynamoDBAttribute
+    private double rating;
 
 }

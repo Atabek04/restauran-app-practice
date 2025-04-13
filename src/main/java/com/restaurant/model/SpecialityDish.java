@@ -1,15 +1,12 @@
 package com.restaurant.model;
 
-import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBHashKey;
-import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBGeneratedUuid;
-import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBAttribute;
-import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -19,21 +16,20 @@ import java.util.UUID;
 public class SpecialityDish {
 
     @DynamoDBHashKey
-    @DynamoDBGeneratedUuid
-    private String id;
+    private String dishId;
 
     @DynamoDBAttribute
     private String name;
 
     @DynamoDBAttribute
-    private String description;
-
-    @DynamoDBAttribute
-    private Location location;
-
-    @DynamoDBAttribute
-    private String cuisine;
+    private String locationId;
 
     @DynamoDBAttribute
     private double price;
+
+    @DynamoDBAttribute
+    private String weight;
+
+    @DynamoDBAttribute
+    private String imageUrl;
 }

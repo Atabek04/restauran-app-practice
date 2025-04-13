@@ -7,7 +7,7 @@ import org.socialsignin.spring.data.dynamodb.repository.DynamoDBCrudRepository;
 import java.util.Optional;
 
 @EnableScan
-public interface UserRepository extends DynamoDBCrudRepository<User, Long> {
+public interface UserRepository extends DynamoDBCrudRepository<User, String> {
 
     Optional<User> findByEmail(String email);
 
