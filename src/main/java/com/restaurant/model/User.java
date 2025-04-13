@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Builder
 @Data
@@ -17,8 +18,8 @@ import java.util.Set;
 @DynamoDBTable(tableName = "Users")
 public class User {
 
-    @DynamoDBHashKey
-    private String id;
+    @DynamoDBHashKey(attributeName = "id")
+    private String id = UUID.randomUUID().toString();
 
     @DynamoDBAttribute(attributeName = "username")
     private String username;
