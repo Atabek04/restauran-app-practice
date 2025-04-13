@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,4 +30,10 @@ public class SpecialityDish {
 
     @DynamoDBAttribute
     private Location location;
+
+    @DynamoDBAttribute
+    private String cuisine;
+
+    @DynamoDBAttribute
+    private double price;
 }

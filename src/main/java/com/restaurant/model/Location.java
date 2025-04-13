@@ -7,6 +7,7 @@ import com.github.derjust.spring_dynamodb.annotation.DynamoDBAttribute;
 import lombok.Data;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @DynamoDBTable(tableName = "locations")

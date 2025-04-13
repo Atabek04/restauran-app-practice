@@ -2,8 +2,8 @@ package com.restaurant.repository;
 
 import com.restaurant.model.SpecialityDish;
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
-import org.springframework.data.repository.CrudRepository;
+import org.socialsignin.spring.data.dynamodb.repository.DynamoDBCrudRepository;
 
 @EnableScan
-public interface SpecialityDishRepository extends CrudRepository<SpecialityDish, String> {
+public interface SpecialityDishRepository extends DynamoDBCrudRepository<SpecialityDish, String> {
 }
