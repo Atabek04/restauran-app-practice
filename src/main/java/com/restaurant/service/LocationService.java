@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface LocationService {
     List<LocationResponse> getAllLocations();
-    LocationResponse getLocationById(String id);
+    LocationResponse getLocationById(Long id);
     List<SpecialityDishResponse> getSpecialityDishes(String locationId);
 }
