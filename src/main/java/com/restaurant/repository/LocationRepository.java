@@ -1,9 +1,9 @@
 package com.restaurant.repository;
 
-import com.restaurant.model.Location;
-import org.springframework.data.repository.CrudRepository;
+import com.restaurant.models.Location;
+import org.socialsignin.spring.data.dynamodb.repository.DynamoDBCrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LocationRepository extends CrudRepository<Location, Long> {
+public interface LocationRepository extends DynamoDBCrudRepository<Location, Long> {
 }
